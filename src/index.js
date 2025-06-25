@@ -1,7 +1,7 @@
 // import mongoose from "mongoose"
 // import { DB_Name } from "./constants"
-// import express from "express"
-// const app = express()
+import express from "express"
+const app = express()
 // ;(async()=>{
 //     try {
 //         await mongoose.connect(`${process.env.MONGODB_URI}/${DB_Name}`)
@@ -36,7 +36,7 @@ connectDB()
     })
 })
 .catch((err)=>{
-    console.log("Connectiion failed!!");
+    console.log("Connectiion failed!!",err);
     
 })
 
