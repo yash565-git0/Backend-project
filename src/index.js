@@ -1,7 +1,6 @@
 // import mongoose from "mongoose"
 // import { DB_Name } from "./constants"
-import express from "express"
-const app = express()
+import {app} from "./app.js"
 // ;(async()=>{
 //     try {
 //         await mongoose.connect(`${process.env.MONGODB_URI}/${DB_Name}`)

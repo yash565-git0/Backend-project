@@ -13,6 +13,9 @@ app.use(cookieParser())
 
 import userRouter from "./routes/user.routes.js"
 
-app.use("api/v1/users",userRouter)
+console.log("Mounting /api/v1/users");
+app.use("/api/v1/users",userRouter)
+
+console.log("User routes mounted at /api/v1/users");
 
 export { app }

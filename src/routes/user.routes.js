@@ -1,4 +1,4 @@
-import { Router, Router } from "express";
+import { Router } from "express";
 import { registerUser } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 
@@ -6,7 +6,10 @@ import { upload } from "../middlewares/multer.middleware.js";
 
 const router = Router()
 
-router.route("/register").post(
+router.route("/register").post((req,res,next)=>{
+    console.log("Hit /register route"); // Debug middleware
+    next();
+},
     upload.fields([
         { 
             name : "avatar",
@@ -14,7 +17,7 @@ router.route("/register").post(
 
         },
         { 
-            name : "coverimage",
+            name : "coverImage",
             maxCount : 1
         }
     ]),
@@ -24,4 +27,4 @@ router.route("/register").post(
 
 
 
-export default router
+export default router ;

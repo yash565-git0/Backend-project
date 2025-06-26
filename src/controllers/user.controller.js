@@ -6,21 +6,27 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 
 const registerUser = asyncHandler( async(req,res)=>{
     
-const {username,email,FullName,password,} = req.body
-console.log("email : ",email);
+const {username,email,fullName,password,} = req.body
+// console.log("email : ",email);
 
-if ([FullName,username,email,password].some((field)=> field?.trim === "")) {
+if ([fullName,username,email,password].some((field)=> field?.trim === "")) {
     throw new ApiError(400,"All fields are required")
 }
 
-const existedUser = User.findOne({
+const existedUser = await User.findOne({
     $or:[{username},{email}]
 })
 if (existedUser) {
     throw new ApiError(409,"User with such email/Username already exists")
 }
 const avatarLocalpath = req.files?.avatar[0]?.path;
-const coverImageLocalpath = req.files?.coverImage[0]?.path
+// const coverImageLocalpath = req.files?.coverImage[0]?.path
+
+let coverImageLocalpath;
+if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
+    coverImageLocalpath = req.files.coverImage[0].path
+    
+}
 
 if (!avatarLocalpath){
     throw new ApiError(400,"Avatar file is required")
@@ -32,7 +38,7 @@ if (!avatar){
     throw new ApiError(400,"Avatar file is required")
 }
 const user = await User.create({
-    FullName,
+    fullName,
     avatar : avatar.url,
     coverImage: coverImage?.url || "" ,
     email,password,
