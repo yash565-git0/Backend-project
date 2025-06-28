@@ -4,17 +4,24 @@ import { User } from "../models/user.model.js";
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
 
+
 const generateAccessAndRefreshToken = async function(userId){
     try {
         const user = await User.findById(userId)
+
+         if (!user) {
+            throw new ApiError(404, "User not found");
+        }
+
         const accessToken = user.generateAccessToken()
         const refreshToken = user.generateRefreshToken()
 
         user.refreshToken = refreshToken
-        user.save({validateBeforeSave:false})
+        await user.save({validateBeforeSave:false})
         return {accessToken,refreshToken}
 
     } catch (error) {
+        console.log(error)
         throw new ApiError(504,"Something went wrong while generating tokens")
     }
 }
@@ -112,7 +119,7 @@ return res
 .json(
     new ApiResponse(200,{
         user : loggedInUser,accessToken,refreshToken
-    },"User Loggein Successfully")
+    },"User Login Successfully")
 )
  
 
@@ -123,7 +130,7 @@ return res
 
 })
 
-const loggeOutUser = asyncHandler(async(req,res)=>{
+const logoutUser = asyncHandler(async(req,res)=>{
     
     await User.findByIdAndUpdate(
         req.user._id,{
@@ -152,4 +159,4 @@ return res
 
 
 
-export {registerUser , loginUser , loggeOutUser}
+export {registerUser , loginUser , logoutUser}
